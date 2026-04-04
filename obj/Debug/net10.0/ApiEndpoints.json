@@ -1,5 +1,42 @@
 [
   {
+    "ContainingType": "cryptoapi.Controllers.CryptoController",
+    "Method": "AddCryptoToWallet",
+    "RelativePath": "api/crypto",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "dto",
+        "Type": "cryptoapi.Dto.CreateCryptoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "cryptoapi.Controllers.CryptoController",
+    "Method": "GetUserWallet",
+    "RelativePath": "api/crypto/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "cryptoapi.Controllers.UserController",
     "Method": "Create",
     "RelativePath": "api/users",
