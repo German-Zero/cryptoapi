@@ -1,3 +1,5 @@
+using cryptoapi.Application;
+using cryptoapi.Domain;
 using cryptoapi.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +13,10 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<UserService>();
 
 var app = builder.Build();
 

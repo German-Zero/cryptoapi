@@ -140,3 +140,5 @@ C:\Users\Zero\Desktop\CryptoWallet\cryptoapi\obj\Debug\net10.0\refint\cryptoapi.
 C:\Users\Zero\Desktop\CryptoWallet\cryptoapi\obj\Debug\net10.0\cryptoapi.pdb
 C:\Users\Zero\Desktop\CryptoWallet\cryptoapi\obj\Debug\net10.0\cryptoapi.genruntimeconfig.cache
 C:\Users\Zero\Desktop\CryptoWallet\cryptoapi\obj\Debug\net10.0\ref\cryptoapi.dll
+C:\Users\Zero\Desktop\CryptoWallet\cryptoapi\obj\Debug\net10.0\cryptoapi.sourcelink.json
+C:\Users\Zero\Desktop\CryptoWallet\cryptoapi\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
