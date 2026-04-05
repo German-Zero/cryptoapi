@@ -17,6 +17,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ICryptoRepository, CryptoRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<TransactionService>();
+builder.Services.AddScoped<WalletService>();
+
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

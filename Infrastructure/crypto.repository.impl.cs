@@ -9,32 +9,20 @@ namespace cryptoapi.Infrastructure
     {
         private readonly AppDbContext _context;
 
-        public CryptoRepository(AppDbContext context) 
-        { 
+        public CryptoRepository(AppDbContext context)
+        {
             _context = context;
         }
 
-        public async Task<List<Crypto>> GetByUserIdAsync(int userId)
+        public async Task<Crypto?> GetByUserIdAndCode(int userId, string code)
         {
             return await _context.Cryptos
-                .Where(c => c.UserId == userId)
-                .ToListAsync();
-        }
-
-        public async Task<Crypto?> GetByIdAsync(int id)
-        {
-            return await _context.Cryptos.FindAsync(id);
+                .FirstOrDefaultAsync(c => c.UserId == userId && c.CryptoCode == code);
         }
 
         public async Task AddAsync(Crypto crypto)
         {
             await _context.Cryptos.AddAsync(crypto);
-        }
-
-        public Task UpdateAsync(Crypto crypto)
-        {
-            _context.Cryptos.Update(crypto);
-            return Task.CompletedTask;  
         }
 
         public async Task SaveChangesAsync()
