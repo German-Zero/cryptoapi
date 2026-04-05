@@ -56,6 +56,7 @@ namespace cryptoapi.Application
             t.Quantity = dto.Quantity;
             t.Money = dto.Money;
             t.Action = dto.Action;
+            t.CryptoCode = dto.CryptoCode;
 
             await _transactionRepository.UpdateAsync(t);
             await _transactionRepository.SaveChangesAsync();

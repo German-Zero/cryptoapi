@@ -1,11 +1,11 @@
 ﻿namespace cryptoapi.Dto
 {
-    public class TransactionRequestDto
+    public class ExchangeCryptoDto
     {
         public int UserId { get; set; }
-        public string CryptoCode { get; set; }
-        public decimal AmountFiat { get; set; }
-        public string Action { get; set; }
+        public string FromCrypto { get; set; }
+        public string ToCrypto { get; set; }
+        public decimal Amount { get; set; }
     }
 
     public class TransactionResponseDto
@@ -23,5 +23,6 @@
         public decimal Quantity { get; set; }
         public string Action { get; set; }
         public decimal Money { get; set; }
+        public string CryptoCode { get; set; }
     }
 }

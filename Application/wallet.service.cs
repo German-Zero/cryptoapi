@@ -2,6 +2,7 @@
 using cryptoapi.Dto;
 using cryptoapi.Entity;
 using cryptoapi.Infrastructure;
+using System.Security.Cryptography.X509Certificates;
 
 namespace cryptoapi.Application
 {
@@ -24,64 +25,105 @@ namespace cryptoapi.Application
             _httpClient = httpClient;
         }
 
-        public async Task ExecuteTransaction(TransactionRequestDto dto)
+        public async Task<decimal> GetTotalInARS(int userId)
+        {
+            var wallet = await _cryptoRepository.GetByUserIdAsync(userId);
+
+            decimal total = 0;
+
+            foreach (var crypto in wallet)
+            {
+                var price = await GetPrice(crypto.CryptoCode);
+                total += crypto.Amount * price.bid;
+            }
+            return total;
+        }
+
+        public async Task AddCryptoToUser(CreateCryptoDto dto)
+        {
+            var crypto = await _cryptoRepository
+                .GetByUserIdAndCode(dto.userId, dto.cryptoCode);
+
+            if (crypto == null)
+            {
+                crypto = new Crypto
+                {
+                    UserId = dto.userId,
+                    CryptoCode = dto.cryptoCode,
+                    Amount = dto.amount
+                };
+                
+                await _cryptoRepository.AddAsync(crypto);
+            }
+            else
+            {
+                crypto.Amount += dto.amount;
+            }
+            await _cryptoRepository.SaveChangesAsync();
+        }
+
+        public async Task ExchangeCrypto(ExchangeCryptoDto dto)
         {
             using var dbTransaction = await _context.Database.BeginTransactionAsync();
 
-            var Price = await GetPrice(dto.CryptoCode);
+            var fromWallet = await _cryptoRepository
+                .GetByUserIdAndCode(dto.UserId, dto.FromCrypto);
+            
+            if (fromWallet == null || fromWallet.Amount < dto.Amount)
+                throw new Exception("Fondos Insuficientes");
 
-            var cryptoAmount = dto.AmountFiat / Price;
+            var priceFrom = await GetPrice(dto.FromCrypto);
+            var priceTo = await GetPrice(dto.ToCrypto);
 
-            var wallet = await _cryptoRepository
-                .GetByUserIdAndCode(dto.UserId, dto.CryptoCode);
+            Console.WriteLine($"FROM BID: {priceFrom.bid}");
+            Console.WriteLine($"TO ASK: {priceTo.ask}");
 
-            if (dto.Action == "BUY")
+            var arsValue = dto.Amount * priceFrom.bid;
+            var toAmount = arsValue / priceTo.ask;
+
+
+            fromWallet.Amount -= dto.Amount;
+
+            var toWallet = await _cryptoRepository
+                .GetByUserIdAndCode(dto.UserId, dto.ToCrypto);
+
+            if (toWallet == null)
             {
-                if (wallet == null)
-                {
-                    wallet = new Crypto
-                    {
-                        UserId = dto.UserId,
-                        CryptoCode = dto.CryptoCode,
-                        Amount = 0
-                    };
-
-                    wallet.Amount += cryptoAmount;
-                }
-                else if (dto.Action == "SELL")
-                {
-                    if (wallet == null || wallet.Amount < cryptoAmount)
-                    {
-                        throw new Exception("Fondos Insuficientes");
-
-                        wallet.Amount -= cryptoAmount;
-                    }
-                }
-
-                await _transactionRepository.AddAsync(new Transaction
+                toWallet = new Crypto
                 {
                     UserId = dto.UserId,
-                    CryptoCode = dto.CryptoCode,
-                    Quantity = dto.AmountFiat,
-                    Money = cryptoAmount,
-                    Action = dto.Action,
-                    DateTime = DateTime.UtcNow
-                });
-
-                await _cryptoRepository.SaveChangesAsync();
-                await dbTransaction.CommitAsync();
+                    CryptoCode = dto.ToCrypto,
+                    Amount = 0
+                };
+                await _cryptoRepository.AddAsync(toWallet);
             }
+            
+            toWallet.Amount += toAmount;
+
+            await _transactionRepository.AddAsync(new Transaction
+            {
+                UserId = dto.UserId,
+                CryptoCode = $"{dto.FromCrypto} -> {dto.ToCrypto}",
+                Quantity = dto.Amount,
+                Money = arsValue,
+                Action = "Exchange",
+                DateTime = DateTime.UtcNow
+            });
+
+            await _cryptoRepository.SaveChangesAsync();
+            await dbTransaction.CommitAsync();
         }
-        private async Task<decimal> GetPrice(string cryptoCode)
+        private async Task<CryptoPriceDto> GetPrice(string cryptoCode)
         {
-            var url = $"https://criptoya.com/api/satoshitango/{cryptoCode}/ARS/1";
+            var url = $"https://criptoya.com/api/satoshitango/{cryptoCode}/ARS";
 
             var response = await _httpClient.GetFromJsonAsync<CryptoPriceDto>(url);
 
             if (response == null)
                 throw new Exception("Error al obtener precio");
 
-            return response.ask;
+            Console.WriteLine(response);
+            return response;
         }
     }
 }

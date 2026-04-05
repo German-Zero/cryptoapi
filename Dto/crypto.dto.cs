@@ -8,6 +8,7 @@
 
     public class CreateCryptoDto
     {
+        public int userId { get; set; }
         public string cryptoCode { get; set; }
         public decimal amount { get; set; }
     }
@@ -16,8 +17,5 @@
     {
         public decimal ask { get; set; }
         public decimal bid { get; set; }
-        public decimal totalAsk { get; set; }
-        public decimal totalBid { get; set; }
-        public long time { get; set; }
     }
 }

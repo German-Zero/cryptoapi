@@ -1,7 +1,6 @@
 ﻿using cryptoapi.Domain;
-using cryptoapi.Dto;
 using cryptoapi.Entity;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace cryptoapi.Infrastructure
 {
@@ -18,6 +17,13 @@ namespace cryptoapi.Infrastructure
         {
             return await _context.Cryptos
                 .FirstOrDefaultAsync(c => c.UserId == userId && c.CryptoCode == code);
+        }
+
+        public async Task<List<Crypto>> GetByUserIdAsync(int userId)
+        {
+            return await _context.Cryptos
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
         }
 
         public async Task AddAsync(Crypto crypto)

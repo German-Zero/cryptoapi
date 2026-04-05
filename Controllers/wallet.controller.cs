@@ -15,10 +15,24 @@ namespace cryptoapi.Controllers
             _walletService = walletService;
         }
 
-        [HttpPost("transaction")]
-        public async Task<IActionResult> Execute(TransactionRequestDto dto)
+        [HttpPost("add")]
+        public async Task<IActionResult> AddCrypto(CreateCryptoDto dto)
         {
-            await _walletService.ExecuteTransaction(dto);
+            await _walletService.AddCryptoToUser(dto);
+            return Ok("Cripto agregada");
+        }
+
+        [HttpGet("{userId}/total-ars")]
+        public async Task<IActionResult> GetTotalInARS(int userId)
+        {
+            var total = await _walletService.GetTotalInARS(userId);
+            return Ok(total);
+        }
+
+        [HttpPost("exchange")]
+        public async Task<IActionResult> Execute(ExchangeCryptoDto dto)
+        {
+            await _walletService.ExchangeCrypto(dto);
             return Ok("Transacion Completa.");
         }
     }
