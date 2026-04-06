@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("cryptoapi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+86a9b88f5a3e7d13cd763f674c31a0b104240c41")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ceddcab97cc636385f3c1e5e738b752a6e09f8d0")]
 [assembly: System.Reflection.AssemblyProductAttribute("cryptoapi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("cryptoapi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -102,6 +102,22 @@
   },
   {
     "ContainingType": "cryptoapi.Controllers.WalletController",
+    "Method": "GetWallet",
+    "RelativePath": "api/wallet/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "cryptoapi.Controllers.WalletController",
     "Method": "GetTotalInARS",
     "RelativePath": "api/wallet/{userId}/total-ars",
     "HttpMethod": "GET",

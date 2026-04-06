@@ -22,6 +22,13 @@ namespace cryptoapi.Controllers
             return Ok("Cripto agregada");
         }
 
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetWallet(int userId)
+        {
+            var wallet = await _walletService.GetWallet(userId);
+            return Ok(wallet);
+        }
+
         [HttpGet("{userId}/total-ars")]
         public async Task<IActionResult> GetTotalInARS(int userId)
         {

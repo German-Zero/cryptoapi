@@ -25,6 +25,17 @@ namespace cryptoapi.Application
             _httpClient = httpClient;
         }
 
+        public async Task<List<CryptoResponseDto>> GetWallet(int userId)
+        {
+            var cryptos = await _cryptoRepository.GetByUserIdAsync(userId);
+
+            return cryptos.Select(c => new CryptoResponseDto
+            {
+                cryptoCode = c.CryptoCode,
+                amount = c.Amount
+            }).ToList();
+        }
+
         public async Task<decimal> GetTotalInARS(int userId)
         {
             var wallet = await _cryptoRepository.GetByUserIdAsync(userId);
