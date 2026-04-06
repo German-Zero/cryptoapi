@@ -1,6 +1,12 @@
-﻿namespace cryptoapi.Domain
+﻿using cryptoapi.Entity;
+
+namespace cryptoapi.Domain
 {
-    public class crypto
+    public interface ICryptoRepository
     {
+        Task<Crypto?> GetByUserIdAndCode(int userId, string code);
+        Task<List<Crypto?>> GetByUserIdAsync(int userId);
+        Task AddAsync(Crypto crypto);
+        Task SaveChangesAsync();
     }
 }
